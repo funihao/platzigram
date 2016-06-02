@@ -130,3 +130,7 @@ También incluimos en el archivo `Gulpfile.js` una evento para controlar cuando 
   }
   ...
 ```
+
+## 19 - Cambiando el Título de la página
+
+Algo que aporta mucho a la usabilidad del usuario es el poder mostrar en el Title el mensaje correcto de acuerdo a la vista en la que estemos, para eso nos vamos a apoyar de algunos cambios desde el backend además de una nueva librería llamada title, para asegurar que el title cambia de acuerdo a la ruta que elijamos.
