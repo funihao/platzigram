@@ -88,3 +88,45 @@ Parte de hacer buen código en JavaScript es modularizar cada funcionalidad. Par
 Vamos a crear una carpeta en el directorio `src/` para cada página. Así tendremos una para **"homepage"** y otra para **"signup"**, etc...
 
 Cada carpeta debe contener un **_index.js_** que será el punto de entrada. Ademas contendrá los templates necesarios para renderizar dichas páginas correctamente.
+
+## 18 - Agregando la página de **_signin/_**
+
+Vamos a repasar lo aprendido hasta ahora creando una nueva funcionalidad a nuestra aplicación: Crear la pagina de login. Además, aprendemos cómo gracias a watchify, podemos mostrar un error en la consola de forma automática en cuanto esto suceda.
+
+### Operaciones
+
+Crearemos una nueva página para hacer login en el caso de que ya estemos registrados y tengamos un nombre de *usuario* y un *password*. Esta página la llamaremos `signin`. Básicamente será como lo que hemos creado hasta ahora para `signup`.
+
+Creamos una carpeta con el nombre de `signin` que contendrá los archivos `index.js` y `template.js`.
+
+Ahora bien, no es necesario modificar toda la página. Hay una parte que será común a ambas páginas y que llamaremos `landing`, está será una página de base donde pondremos solo lo que cambie de `signup` a `signin` y viceversa.
+
+En el `index.js` de `landing` pondremos lo que es común y habilitamos en la plantilla una "*caja*" (`${box}`) que será la que recoja el código que diferencia a una página de otra.
+
+Ahora el `index.js` de `src/` debe contener todas las rutas:
+
+```javascript
+  var page = require('page');
+
+  require('./homepage');
+  require('./signup');
+  require('./signin');
+
+  page();
+```
+
+También incluimos en el archivo `Gulpfile.js` una evento para controlar cuando se produzca un error que nos de información del mismo.
+
+```javascript
+...
+  function rebundle() {
+    bundle
+      .transform(babel)
+      .bundle()
+      .on('error', function (err) { console.log(err); this.emit('end'); })
+      .pipe(source('index.js'))
+      .pipe(rename('app.js'))
+      .pipe(gulp.dest('public'));
+  }
+  ...
+```
