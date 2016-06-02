@@ -6,7 +6,7 @@ Desarrollaremos una aplicación (single page aplication) denominada _"Platzigram
 El objetivo no es hacer el html y luego el Jade, Sacha explica una introducción a Jade el cual puede tomar como ejemplo para utilizarlo como preprocesador como les comentaba anteriormente.
 Mas info en [Aprende Jade](http://learnjade.com/)
 
-## Herraminetas
+## Herramientas
 
 - Node.js
 - Express
@@ -78,3 +78,13 @@ Yo-yo sigue un poco la filosofía de React (Orientado a componentes) : Nos ayuda
 ### Empty-Element
 
 Librería que nos facilita limpiar un elemento del DOM y posteriormente añadirle el nuevo código HTML.
+
+## 17 - Modularizando nuestro proyecto
+
+Parte de hacer buen código en JavaScript es modularizar cada funcionalidad. Para convertir cada archivo js en un módulo usamos module.exports, y para usar dicho módulo en otra parte de nuestra aplicación usamos requiere (Si, justo como las librerías importadas con NPM). Notarás que el resultado del ejercicio es tener un código más legible y modular.
+
+### Operaciones
+
+Vamos a crear una carpeta en el directorio `src/` para cada página. Así tendremos una para **"homepage"** y otra para **"signup"**, etc...
+
+Cada carpeta debe contener un **_index.js_** que será el punto de entrada. Ademas contendrá los templates necesarios para renderizar dichas páginas correctamente.
