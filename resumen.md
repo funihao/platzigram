@@ -134,3 +134,90 @@ También incluimos en el archivo `Gulpfile.js` una evento para controlar cuando 
 ## 19 - Cambiando el Título de la página
 
 Algo que aporta mucho a la usabilidad del usuario es el poder mostrar en el Title el mensaje correcto de acuerdo a la vista en la que estemos, para eso nos vamos a apoyar de algunos cambios desde el backend además de una nueva librería llamada title, para asegurar que el title cambia de acuerdo a la ruta que elijamos.
+
+## 20 - Agregando un timeline para los usuarios
+
+Creamos un nuevo módulo de nuestra aplicación. A diferencia del primer repaso, esta vista tendrá un nuevo agregado: Fuente de iconos. Incluirlos en nuestro proyecto es muy sencillo, incluimos el CDN respectivo en nuestro template y podemos disponer de ellos gracias a un tag y una clase predeterminada.
+
+## 23 - Agragando la fecha de publicación
+
+[Moment.js]() es una librería que nos ofrece diferentes formas de agregar fechas, desde el tradicional formato 24 horas hasta las fechas relativas (Hace x tiempo). Platzigram usa fechas relativas, por lo tanto, solo necesitamos pasar como parámetro la fecha actual ( se puede usar new Date() ) y la librería se encarga del resto.
+
+``` shell
+ $ npm i --save moment
+```
+
+Nosotros estamos utilizando *Browserify* y para que no de problemas tenemos que poner en el `index.js` de nuestra aplicación, en el raiz.
+
+
+```javascript
+var moment = require('moment');
+
+require('moment/locale/es');
+
+moment.locale('es');
+
+```
+
+Para utilizarlo en nuestro código:
+
+```javascript
+var moment = require('moment');
+...
+<small class="right time">${moment(pic.createdAt).fromNow()}</small>
+```
+
+También se añade un nuevo campo con la fecha en el archivo `inex.js` de la `homepage`.
+
+
+```javascript
+...
+url: 'office.jpg',
+likes: 2,
+liked: true,
+createdAt: new Date().setDate(new Date().getDate() - 10)
+...
+```
+
+## 24 - Utilizando FormaJS para internacionalizar las fechas
+
+Soportar múltiples idiomas es un requerimiento básico en el desarrollo de aplicaciones modernas. Gracias a  una librería llamada [FormatJS](formatjs.io), podemos disponer de traducción de fecha y textos del lado del cliente. Además, usaremos un polyfill para asegurar la compatibilidad en todos los navegadores. Esta librería es mas estandar que `moment.js` y ademas es soportada nativamente por todos los navegadores, excepto en **Safari**. Esta librería aprovecha la variable definida en los navegadores como `Intl`.
+
+``` shell
+ $ npm i --save intl-relativeformat
+```
+
+Siguiendo la documentación, lo que debemos hacer es *requerir* la en nuestro archivo `indes.js`
+
+```javascript
+...
+var moment = require('moment');
+var IntlRelativeFormat = require('intl-relativeformat');
+
+require('intl-relativeformat/dist/locale-data/en.js');
+require('intl-relativeformat/dist/locale-data/es.js');
+
+var rf = new IntlRelativeFormat('es');
+...
+```
+
+Para **Safari** hay que añadir antes de requerir la librería:
+
+```javascript
+...
+if (!window.Intl) {
+    window.Intl = require('intl'); // polyfill for `Intl`
+    req('intl-relativeformat/dist/locale-data/en.js')
+    req('intl-relativeformat/dist/locale-data/es.js')
+}
+
+var IntlRelativeFormat = window.IntlRelativeFormat = require('intl-relativeformat');
+
+require('intl-relativeformat/dist/locale-data/en.js');
+require('intl-relativeformat/dist/locale-data/es.js');
+
+var rf = new IntlRelativeFormat('es');
+...
+```
+
+Eliminamos la librería `moment.js` que ya no necesitaremos ya que la hemos sustituido por `Format.JS`
