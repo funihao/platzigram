@@ -15,9 +15,20 @@ page('/', function (ctx, next) {
         avatar: 'https://scontent.fmad3-2.fna.fbcdn.net/v/t1.0-1/1972521_10201354093120395_628733009_n.jpg?oh=acdb3db08b86f518d6e0c42e02d21a40&oe=57C68D61'
       },
       url: 'office.jpg',
-      likes: 10,
-      liked: true,
+      likes: 0,
+      liked: false,
       createdAt: new Date()
+    },
+    {
+      user: {
+        username: 'jjpalacios',
+        avatar: 'https://scontent.fmad3-2.fna.fbcdn.net/v/t1.0-1/1972521_10201354093120395_628733009_n.jpg?oh=acdb3db08b86f518d6e0c42e02d21a40&oe=57C68D61'
+      },
+      url: 'office.jpg',
+      likes: 1,
+      liked: true,
+      createdAt: new Date().setDate(new Date().getDate() - 10)
+
     },
     {
       user: {

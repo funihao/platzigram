@@ -221,3 +221,41 @@ var rf = new IntlRelativeFormat('es');
 ```
 
 Eliminamos la librería `moment.js` que ya no necesitaremos ya que la hemos sustituido por `Format.JS`
+
+## 25 - Utilizando FormatJS para internacionalizar los textos
+
+Completando el ejercicio anterior, ahora usaremos `FormarJS` para cambiar los textos de la aplicación. Dependiendo de los diferentes valores de configuración que pasemos por parámetro, será el resultado mostrado. Para ello siguiendo con esta librería usaremos `IntlMessageFormat`. También la utilizaremos para traducir todos los textos para poder crear sitios multi-lenguaje.
+
+Debemos instalar la librería `Intl-MessageFormat`.
+
+``` shell
+$ npm i --save intl-messageformat
+```
+
+Vamos a crear un nuevo módulo `translate` donde colocaremos toda la lógica de internazionalización y traducción. En el `index.js` pondremos todo el código que anteriormente habíamos añadido en `picture-card` para usar la librería `Intl-RelativeFormat`. Ahí añadimos el `require` para `Itnl-MessageFormat`.
+
+```javascript
+...
+if (!window.Intl) {
+  window.Intl = require('intl'); // polyfill for `Intl`
+  req('intl-relativeformat/dist/locale-data/en.js')
+  req('intl-relativeformat/dist/locale-data/es.js')
+}
+
+var IntlRelativeFormat = window.IntlRelativeFormat = require('intl-relativeformat');
+var IntlMessageFormat = require('intl-messageformat');
+
+require('intl-relativeformat/dist/locale-data/en.js');
+require('intl-relativeformat/dist/locale-data/es.js');
+
+var rf = new IntlRelativeFormat('es');
+...
+```
+
+Y en su lugar en el archivo `index.js` de `picture-card` pondremos:
+
+```javascript
+...
+var translate = require('../translate');
+...
+```
