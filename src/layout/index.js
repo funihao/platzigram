@@ -1,5 +1,5 @@
 var yo = require('yo-yo');
-// var landing = require('../landing');
+var translate = require('../translate');
 
 module.exports = function layout(content) {
   return yo `<div>
@@ -16,7 +16,7 @@ module.exports = function layout(content) {
               </a>
             </div>
             <ul id="drop-user" class="dropdown-content">
-              <li><a href="#">Salir</a></li>
+              <li><a href="#">${translate.message('logout')}</a></li>
             </ul>
           </div>
         </div>
