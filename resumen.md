@@ -259,3 +259,102 @@ Y en su lugar en el archivo `index.js` de `picture-card` pondremos:
 var translate = require('../translate');
 ...
 ```
+
+## 26 - Cambiando el idioma y almacenándolo en localStorage
+
+Añadimos todas las cadenas de traducción en los archivos `es.js` y `en.js`. Estas cadenas se referencian ahora en el código como:
+
+```javascript
+...
+<input type="text" name="username" placeholder="${translate.message('username')}" />
+<input type="password" name="password" placeholder="${translate.message('password')}" />
+...
+```
+Pero en el `footer` incluido en el la `view` que habíamos realizado con `Jade` tenemos también texto que debe ser remplazo pero no podemos hacerlo aquí, así que vamos a sacar todo el footer a un archivo `index.js` que vamos a crear en `footer`.
+
+```javascript
+var yo = require('yo-yo');
+var translate = require('../translate');
+
+var el = yo `<foter class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 l3 center-align">
+        <a href="#" data-activates="dropdown1" class="dropdown-button btn">
+          ${translate.message('language')}
+        </a>
+        <ul id="dropdown1" class="dropdown-content">
+          <li><a href="#">${translate.message('spanish')}</a></li>
+          <li><a href="#">${translate.message('english')}</a></li>
+        </ul>
+      </div>
+      <div class="col s12 l3 push-l6 center-align">© 2016 Platzigram</div>
+    </div>
+  </div>
+</foter>`;
+
+document.body.appendChild(el);
+```
+
+Ahora si, ya tenemos todo preparado para traducirlo al idioma que elijamos. Se puede comprobar que si cambiamos en el archivo `index.js` de `translate` la variable `locale`:
+
+Textos en Esapñol.
+```javascript
+...
+var locale = 'es';
+
+module.exports = {
+...
+}
+```
+
+Textos en Inglés.
+```javascript
+...
+var locale = 'en-US';
+
+module.exports = {
+...
+}
+```
+
+Pero lo que queremos es automatizarlo según la elección del menú de `idioma`. Así que en `footer/index.js` vamos a añadir un evento que llame a la función `lang`, de esta forma:
+
+```javascript
+...
+var el = yo `<foter class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 l3 center-align">
+        <a href="#" data-activates="dropdown1" class="dropdown-button btn">
+          ${translate.message('language')}
+        </a>
+        <ul id="dropdown1" class="dropdown-content">
+          <li><a href="#" onclick=${lang.bind(null, 'es')}>${translate.message('spanish')}</a></li>
+          <li><a href="#" onclick=${lang.bind(null, 'en-US')}>${translate.message('english')}</a></li>
+        </ul>
+      </div>
+      <div class="col s12 l3 push-l6 center-align">© 2016 Platzigram</div>
+    </div>
+  </div>
+</foter>`;
+
+function lang(locale) {
+  localStorage.locale = locale;
+  location.reload();
+}
+
+document.body.appendChild(el);
+
+```
+
+Ademas vamos a guardar la selección en `localStorage.locale` y cambiamos la forma en que inicializamos la variable `locale` en `translate/index.js`:
+
+```javascript
+...
+var locale = localStorage.locale || 'es';
+
+module.exports = {
+  ...
+}
+```
