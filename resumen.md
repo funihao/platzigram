@@ -1,3 +1,33 @@
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Curso definitivo de Java Script](#curso-definitivo-de-java-script)
+	- [Herramientas](#herramientas)
+	- [Clases](#clases)
+		- [Gulp](#gulp)
+		- [Babel y Browserify](#babel-y-browserify)
+		- [Vinyl-Source-Stream](#vinyl-source-stream)
+		- [ECMAScript 6](#ecmascript-6)
+		- [Page](#page)
+		- [Automatizar el build](#automatizar-el-build)
+		- [Yo-yo](#yo-yo)
+		- [Empty-Element](#empty-element)
+	- [17 - Modularizando nuestro proyecto](#17-modularizando-nuestro-proyecto)
+		- [Operaciones](#operaciones)
+	- [18 - Agregando la página de **_signin/_**](#18-agregando-la-pgina-de-signin)
+		- [Operaciones](#operaciones)
+	- [19 - Cambiando el Título de la página](#19-cambiando-el-ttulo-de-la-pgina)
+	- [20 - Agregando un timeline para los usuarios](#20-agregando-un-timeline-para-los-usuarios)
+	- [23 - Agragando la fecha de publicación](#23-agragando-la-fecha-de-publicacin)
+	- [24 - Utilizando FormaJS para internacionalizar las fechas](#24-utilizando-formajs-para-internacionalizar-las-fechas)
+	- [25 - Utilizando FormatJS para internacionalizar los textos](#25-utilizando-formatjs-para-internacionalizar-los-textos)
+	- [26 - Cambiando el idioma y almacenándolo en localStorage](#26-cambiando-el-idioma-y-almacenndolo-en-localstorage)
+	- [27 - Obteniendo una respuesta del servidor con Superagent](#27-obteniendo-una-respuesta-del-servidor-con-superagent)
+		- [Modificando el comportamiento del header](#modificando-el-comportamiento-del-header)
+
+<!-- /TOC -->
+
+***
+
 # Curso definitivo de Java Script
 
 Desarrollaremos una aplicación (single page aplication) denominada _"Platzigram"_ con **HTML5**, **CSS** y **JavaScript**.
@@ -33,6 +63,7 @@ Necesario para cambiar el código que genera *browserify* a un código que entie
 
 Nueva sintaxsis de JavaScript no está disponible al 100% en todos los navegadoes para eso usaremos *Babel*.
 Un ejemplo de la antigua sintaxsis la vemos aquí a continuación.
+
 ```javascript
 var numeros = [400, 200, 1, -23];
 
@@ -357,4 +388,166 @@ var locale = localStorage.locale || 'es';
 module.exports = {
   ...
 }
+```
+
+## 27 - Obteniendo una respuesta del servidor con Superagent
+
+Nuestra aplicación tendrá que tener almacenadas las diferentes `pictures` en algún sitio. Habotalmente esto se realiza mediante una bases de datos que reside en el lado del servidor y al cuál dirigimos nuestras peticiones para que nos devuelva las `pictures` que estamos buscando, o para que guarde las nuevas que estamos cargando.
+
+Estas peticiones se realizan mediante **AJAX** y para ello se usa de forma mayoritaria **JQuery** pero también existen otras librerias que facilitan el trabajo. Una de estas es [Superagent](https://github.com/visionmedia/superagent). Vamos a usar esta librería para realizar estas operaciones.
+
+Instalamos la librería:
+
+```shell
+  $ npm i --save superagent
+```
+
+Pasaremos el array que contiene todas las `pictures` al `server.js`. Aquí crearemos una nueva ruta `/api/pictures`, a donde dirigiremos nuestra petición `GET`.
+
+```javascript
+...
+app.get('/api/pictures', function (req, res) {
+  var pictures = [
+    {
+      user: {
+        username: 'jjpalacios',
+        avatar: 'https://scontent.fmad3-2.fna.fbcdn.net/v/t1.0-1/1972521_10201354093120395_628733009_n.jpg?oh=acdb3db08b86f518d6e0c42e02d21a40&oe=57C68D61'
+      },
+      url: 'office.jpg',
+      likes: 0,
+      liked: false,
+      createdAt: new Date().getTime()
+    },
+    {
+      user: {
+        username: 'jjpalacios',
+        avatar: 'https://scontent.fmad3-2.fna.fbcdn.net/v/t1.0-1/1972521_10201354093120395_628733009_n.jpg?oh=acdb3db08b86f518d6e0c42e02d21a40&oe=57C68D61'
+      },
+      url: 'office.jpg',
+      likes: 1,
+      liked: true,
+      createdAt: new Date().setDate(new Date().getDate() - 10)
+
+    },
+    {
+      user: {
+        username: 'jjpalacios',
+        avatar: 'https://scontent.fmad3-2.fna.fbcdn.net/v/t1.0-1/1972521_10201354093120395_628733009_n.jpg?oh=acdb3db08b86f518d6e0c42e02d21a40&oe=57C68D61'
+      },
+      url: 'office.jpg',
+      likes: 2,
+      liked: true,
+      createdAt: new Date().setDate(new Date().getDate() - 10)
+    }
+  ];
+
+  setTimeout(function () {
+    res.send(pictures);
+  }, 1000)
+})
+  ...
+```
+
+Nuestro `homepage/index.js` queda de la siguiente forma, una vez que hemos añadido `superagent`.
+
+```javascript
+var page = require('page');
+var empty = require('empty-element');
+var template = require('./template');
+var title = require('title');
+var request = require('superagent');
+
+page('/', loadPictures, function (ctx, next) {
+  title('Platzigram');
+  var main = document.getElementById('main-container');
+
+  empty(main).appendChild(template(ctx.pictures));
+})
+
+function loadPictures(ctx, next) {
+  request
+    .get('/api/pictures')
+    .end(function (err, res) {
+      if (err) return console.log(err);
+
+      ctx.pictures = res.body;
+      next();
+    })
+}
+```
+
+La función `loadPictures` se encarga de realizar la petición asíncrona. Hacemos un `request` a la dirección `/api/pictures`. Cuando obtenemos una respuesta, comprobamos si se ha producido algún error, en caso contrario devolvemos la respuesta en la variable de contexto, `ctx.pictures` y damos paso a la siguiente función.
+
+### Modificando el comportamiento del header
+Vamos a modificar el comportamiento de nuestra página del `home`. Esta página cada vez que la actualizamos se borra la cabecera con la navegación y se vuelve a mostrar una vez hemos obtenido todas las `pictures`. Un mejor comportamiento sería que cuando se actualiza solo se borre las `pictures` pero no la cabecera y el footer. También cuando se carga or primera vez debe mostrar primero la cabecera y el footer y luego cuando ya se han obtenido las pictures se insertan estas.
+
+Para eso vamos a pasar el header a una carpeta nueva, es decir, vamos a crear un nuevo módulo para ella. Ahí meteremos todo el código. Entonces el archivo `header/index.js` quedara como sigue.
+
+```javascript
+var yo = require('yo-yo');
+var translate = require('../translate');
+
+var el = yo `
+    <nav class="header">
+      <div class="nav-wrapper">
+        <div class="container">
+          <div class="row">
+            <div class="col s12 m6 offset-m1">
+              <a href="/" class="brand-logo platzigram">Platzigram</a>
+            </div>
+            <div class="col s2 m6 push-s10 push-m10">
+              <a href="#" class="btn btn-large btn-flat dropdown-button" data-activates="drop-user">
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </a>
+            </div>
+            <ul id="drop-user" class="dropdown-content">
+              <li><a href="#">${translate.message('logout')}</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  `;
+
+document.getElementById('header-container').appendChild(el);
+
+```
+
+Necesitamos también un nuevo contenedor en nuestra vista que hemos definido como `#header-container`. El archivo `views/index.pug` quedará como sigue.
+
+```jade
+...
+body
+  section#header-container
+  section#main-container
+
+...
+```
+Pero en las páginas de `/signin` y `/signup` no debría aparecer la cabecera ya todavía no nos hemos logado.
+Por ello vamos a modificar el archivo `header/index.js` para convertirlo en un middleware.
+
+```javascript
+
+module.exports = function (ctx, next) {
+  var container = document.getElementById('header-container');
+  empty().appendChild(el);
+  next();
+}
+```
+Sacaremos el `require('/header')` del `src/index,js` y vamos a añadir antes que nada este middleware en `home/index.js`
+
+```javascript
+...
+
+var request = require('superagent');
+var header = require('../header');
+
+page('/', header, loadPictures, function (ctx, next) {
+  title('Platzigram');
+  var main = document.getElementById('main-container');
+
+  empty(main).appendChild(template(ctx.pictures));
+})
+
+...
 ```
