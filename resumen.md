@@ -586,3 +586,14 @@ function loadPicturesAxios(ctx, next) {
 ```
 
 La diferencia con `superagent` es que hemos sacado el tratamiento de errores del callback que hace la petición. La función asícrona o prmesa se llama `then()` y la que captura los errores `catch()`. Podemos encadenar tantas funciones `then()` como necesitemos y al final una única función `catch()` tendrá el error de la promesa que falló.
+
+## 29 - Obteniendo una respuesta del servidor con  Fech API
+
+Fecth es una implementación nativa en los navegadores, por tanto no necesitamos incorporar ñibrería alguna. Desafortunadamente no todos los navegadores soportan a día de hoy `fecth`. En [Can I use](http://caniuse.com/) podemos comprobar que navegadores soportan esta característica de forma nativa. ***Firefox*** y ***Chrome*** desde la versión 45 y ***Opera*** desde la versión 37.
+
+Para los navegadores que no soportan `window.fetch` existe un [***window.fetch polyfill***](https://github.com/github/fetch).
+
+Veamos como sería la sintaxsis.
+
+```javascript
+```
