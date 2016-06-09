@@ -551,3 +551,38 @@ page('/', header, loadPictures, function (ctx, next) {
 
 ...
 ```
+
+## 28 - Obteniendo una respuesta del servdor con Axios
+
+Otra forma de resolver las peticiones al servidor de forma asíncrona es mediante `promesas`.
+
+Las promesas es una novedosa forma de implementar y encadenar peticiones asíncronas. Pensemos que si necesitamos realizar varias peticiones al servidor, por ejemplo, pedimos primero el listado de `pictures ` que tenemos, una vez lo tengamos vamos a pedir el detalle de una de ellas y cuando lo tengamos necesitamos pedir todos los comentarios que se han añadido a esta. Incluso podríamos seleccionar un comentario y pedir nuevamente detalles de es comentario. Y así, sucesivamente.
+
+El anterior ejemplo resulto mediante callbacks nos crearía un código horizontal con un callback que anida otro, que anida otro, que ... y así sucesivamente. Con lo que eso supone en cuanto a tratamiento de errores, etc..
+
+El uso de promesas por contra nos crea un código vertical y al final una función que captura todos los errores.
+
+Veamos como. Primero instalamos la librería.
+
+```shell
+ $ npm i --save Axios
+```
+
+Y ahora modificamos el código de `loadPictures` en `homepage/index,js` de acuerdo a la nueva librería.
+
+```javascript
+
+function loadPicturesAxios(ctx, next) {
+  axios
+  .get('/api/pictures')
+  .then(function (res) {
+    ctx.pictures = res.data;
+    next();
+  })
+  .catch(function (err) {
+    console.log(err);
+  })
+}
+```
+
+La diferencia con `superagent` es que hemos sacado el tratamiento de errores del callback que hace la petición. La función asícrona o prmesa se llama `then()` y la que captura los errores `catch()`. Podemos encadenar tantas funciones `then()` como necesitemos y al final una única función `catch()` tendrá el error de la promesa que falló.
