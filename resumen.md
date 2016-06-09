@@ -596,4 +596,89 @@ Para los navegadores que no soportan `window.fetch` existe un [***window.fetch p
 Veamos como sería la sintaxsis.
 
 ```javascript
+
+function loadPicturesFetch(ctx, next) {
+  fetch('/api/pictures')
+  .then(function (res) {
+    return res.json();
+  })
+  .then(function (pictures) {
+    ctx.pictures = pictures;
+    next();
+  })
+  .catch(function (err) {
+    console.log(err);
+  })
+}
 ```
+
+Fetch nos devuelve una promesa `res.json()`, así que debemos llamar a esta promesa para que cuando este resuelta entonces si que obtenemos nuestros datos y podemos ejecutar `ǹext()` para dar paso al siguiente middleware.
+
+## 30 - Obteniendo una respuesta del servidor con asyn/await
+
+**ECMAScript 6**, ***ES6*** o ***EMACScript 2015*** es la actual versión de JavaScript. Esta versión aún no soporta `asyn/await` que vendrá con ***ES7*** en el *2016*.
+
+Veamos como es el estandar que vendrá. 
+
+```javascript
+
+async function asynLoad(ctx, next) {
+  try {
+    ctx.pictures = await fetch('api/pictures').then(res => res.json());
+    next();
+  } 
+  catch (err) {
+    return console.log(err);
+  } 
+}
+```
+
+Primero tenemos que declarar la función como una función asíncrona mediante la etiqueta `async`. Una vez hecho esto la función la construiremos como un `try..catch`. Dentro del `try` escribiremos la promesa. Algo parecido a lo anterior mediante la función `fetch().then()`. En `fetch` le decimos que queremos y mediante la promesa `then()` esperamos obtener los resultados. En este caso podemos utilizar las funciones `arrow`. Pero para que todo esto funcione correctamente debemos declarar antes de la función `fetch` que debe esperar `await` hasta que las promesas se hayan realizado. Si se produce un error se ira al bloque `catch()`.
+
+Pero actualmente necesitamos instalar unas librerías para que `babel` nos lo convierta al código que ahora si que está soportado por los navegadores. Así que instalaremos:
+
+```shell
+ $ npm i --save-dev babel-plugin-syntax-async-functions
+ $ npm i --save-dev babel-plugin-transform-regenerator
+ $ npm i --save-dev babel-preset-es2015
+
+```
+
+Pero necesitamos decirle a babel que incluya los presets y los plugins al momento de compilar el código. Así pues en el archivo `Gulpfile.js` añadimos:
+
+```javascript
+  function rebundle() {
+    bundle
+      .transform(babel, { presets: ['es2015'], 
+                          plugins: [ 'syntax-async-functions',
+                                     'transform-regenerator' ]})
+      .bundle()
+      .on('error', function (err) { console.log(err); this.emit('end'); })
+      .pipe(source('index.js'))
+      .pipe(rename('app.js'))
+      .pipe(gulp.dest('public'));
+  }
+```
+
+También necesitamos instalar los `polyfill` que van a hacer que sean compatibles las nuevas funciones con los navegadores.
+
+```shell
+ $ npm install --save-dev babel-polyfill 
+```
+
+Y requerir esta librería en nuestro `src/index.js`
+
+```javascript
+require('babel-polyfill');
+var page = require('page');
+
+require('./homepage');
+require('./signup');
+require('./signin');
+require('./footer');
+
+page();
+```
+
+De esta forma tenemos el código preparado para la próxima versión ***ES7***
+
