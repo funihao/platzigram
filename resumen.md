@@ -713,6 +713,8 @@ Para ello vamos a encerrar el input en un `div` con las clases `btn btn-flat` de
 ```
 Por supuesto hemos encerrado el formulario en una fila que contiene una columna. Notar que también hemos añadido el `translate` para convertir el texto al idioma seleccionado. Y a los elementos activos (`form`, `input`, `button`) les hemos colocado la función que queremos que se ejecute en el evento correspondiente, por ejemplo en el `form`, `onsubmit=${onsubmit}`. 
 
+>Notar que para manejar archivos en un formulario es necesario añadir el atributo `enctype="multipart/form-data"`. De otro modo no se responde a los `ìnput` de tipo `file`.
+
 Ahora solo tenemos que dar estilo al input para sacarlo de nuestra vista.
 
 ```scss
@@ -764,6 +766,79 @@ llega el moemnto de darle vida al formulario mediante el código. Cuando hallamo
 
 ```
 
+## 32 - Subiendo la foto a nuestro servidor web
 
+Cuando se hace `click` en un elemento de tipo `submit` dentro de un formulario se dispara `onsubmit` en el mismo. Cuando esto ocurre busca el atributo `action` y el método (si es `post` o `get`, etc y la ruta). Por eso hemos añadido al evento `onsubmit` la función `onsubmit`.
 
+```javascript
+  function onsubmit(ev) {
+    ev.preventDefault();
 
+    var data = new FormData(this);
+    request
+      .post('/api/pictures')
+      .send(data)
+      .end(function (err, res) {
+        console.log(arguments);
+      })
+  }
+
+```
+
+Para evitar que el formulario realice las operaciones que tiene asignadas por defecto cuando se dispara el evento `onsubmit`, es que colocamos antes que nada el `ev.preventDefault()`.
+Cuando se dispara el evento en la variable `this` tenemos todos los datos del formulario. Los datos del formulario los vamos a manejar como un objeto `FormData` que esta dentro de window. Por tanto, `var data = new FormData(this);` contendrá todos los datos del formulario.
+
+Necesitamos un `request` para enviar los datos al servidor. Utilizaremos la librería `superagent` (aunque ya vimos varias formas de implementar `request`). Los enviaremos mediante el método `post`.
+
+```javascript
+    request
+      .post('/api/pictures')
+      .send(data)
+      .end(function (err, res) {
+        console.log(arguments);
+      })
+```
+
+Necesitamos una librería cargar el archivo y guardarlo en el disco duro de nuestro servidor. Vamos a utilizar la librería [`multer`](https://www.npmjs.com/package/multer) .
+
+```shell
+ $ npm i --save multer
+```
+
+En nuestro `server.js` tenemos que añadir esta librería y crear el almacenamiento tal como nos dice la documentación de [`multer`](https://www.npmjs.com/package/multer#diskstorage) para el caso de utilizar un almacenamiento en disco que es lo que queremos.
+
+```javascript
+  var multer = require('multer');
+  var ext = require('file-extension');
+
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, +Date.now() + '.' + ext(file.originalname))
+    }
+  });
+
+  var upload = multer({ storage: storage }).single('picture');
+```
+
+El destino va a ser una carpeta que llamaremos `uploads` y el nombre del archivo lo construimos con el número de fecha y hora y la extensión del archivo original. Para hacer esto de una forma sencilla empleamos la librería `file-extension` que debemos instalar como dependencia y llamar al principio de nuestro `server.js`.
+
+```shell
+ $ npm i --save file-extension
+```
+
+Ahora creamos nuestro `post` que va a ser una carga simple `upload.single('picture')` según la [documentación](https://www.npmjs.com/package/multer#usage), donde `picture` es el nombre que hemos dado a nuestro `input`.
+
+```javascript
+app.post('/api/pictures', function (req, res) {
+  upload(req, res, function (err) {
+    if (err) {
+      return res.status(500).send("Error uploading file");
+    }
+    res.send('File uploaded');
+  })
+})
+
+```
