@@ -13,31 +13,31 @@
 		- [Empty-Element](#empty-element)
 	- [17 - Modularizando nuestro proyecto](#17-modularizando-nuestro-proyecto)
 		- [Operaciones](#operaciones)
-	- [18 - Agregando la página de **_signin/_**](#18-agregando-la-pgina-de-signin)
+	- [18 - Agregando la página de **_`/signin`_**](#18-agregando-la-pgina-de-signin)
 		- [Operaciones](#operaciones)
 	- [19 - Cambiando el Título de la página](#19-cambiando-el-ttulo-de-la-pgina)
-	- [20 - Agregando un timeline para los usuarios](#20-agregando-un-timeline-para-los-usuarios)
-	- [23 - Agragando la fecha de publicación](#23-agragando-la-fecha-de-publicacin)
-	- [24 - Utilizando FormaJS para internacionalizar las fechas](#24-utilizando-formajs-para-internacionalizar-las-fechas)
-	- [25 - Utilizando FormatJS para internacionalizar los textos](#25-utilizando-formatjs-para-internacionalizar-los-textos)
-	- [26 - Cambiando el idioma y almacenándolo en localStorage](#26-cambiando-el-idioma-y-almacenndolo-en-localstorage)
-	- [27 - Obteniendo una respuesta del servidor con Superagent](#27-obteniendo-una-respuesta-del-servidor-con-superagent)
+	- [20 - Agregando un _`timeline`_ para los usuarios](#20-agregando-un-timeline-para-los-usuarios)
+	- [23 - Agregando la fecha de publicación](#23-agregando-la-fecha-de-publicacin)
+	- [24 - Utilizando ***`FormatJS`*** para internacionalizar las fechas](#24-utilizando-formatjs-para-internacionalizar-las-fechas)
+	- [25 - Utilizando ***`FormatJS`*** para internacionalizar los textos](#25-utilizando-formatjs-para-internacionalizar-los-textos)
+	- [26 - Cambiando el idioma y almacenándolo en ***`localStorage`***](#26-cambiando-el-idioma-y-almacenndolo-en-localstorage)
+	- [27 - Obteniendo una respuesta del servidor con ***`Superagent`***](#27-obteniendo-una-respuesta-del-servidor-con-superagent)
 		- [Modificando el comportamiento del header](#modificando-el-comportamiento-del-header)
-	- [28 - Obteniendo una respuesta del servdor con Axios](#28-obteniendo-una-respuesta-del-servdor-con-axios)
-	- [29 - Obteniendo una respuesta del servidor con  Fech API](#29-obteniendo-una-respuesta-del-servidor-con-fech-api)
-	- [30 - Obteniendo una respuesta del servidor con asyn/await](#30-obteniendo-una-respuesta-del-servidor-con-asynawait)
+	- [28 - Obteniendo una respuesta del servidor con ***`Axios`***](#28-obteniendo-una-respuesta-del-servidor-con-axios)
+	- [29 - Obteniendo una respuesta del servidor con ***Fech API***](#29-obteniendo-una-respuesta-del-servidor-con-fech-api)
+	- [30 - Obteniendo una respuesta del servidor con `asyn/await`](#30-obteniendo-una-respuesta-del-servidor-con-asynawait)
 	- [31 - Agregando un botón para subir una nueva foto](#31-agregando-un-botn-para-subir-una-nueva-foto)
+	- [32 - Subiendo la foto a nuestro servidor web](#32-subiendo-la-foto-a-nuestro-servidor-web)
 
 <!-- /TOC -->
 ***
-
 # Curso definitivo de Java Script
 
 Desarrollaremos una aplicación (single page aplication) denominada _"Platzigram"_ con **HTML5**, **CSS** y **JavaScript**.
 
 **Jade** es un “template engine”(motor de plantillas) de alto performance, enfocado en permitir escribir código HTML de forma rápida. Podríamos decir que se trata de un pre-procesador de código html; similar a stylus, sass o less con respecto a css.
 El objetivo no es hacer el html y luego el Jade, Sacha explica una introducción a Jade el cual puede tomar como ejemplo para utilizarlo como preprocesador como les comentaba anteriormente.
-Mas info en [Aprende Jade](http://learnjade.com/)
+Ver mas en [Aprende Jade](http://learnjade.com/)
 
 ## Herramientas
 
@@ -123,7 +123,7 @@ Vamos a crear una carpeta en el directorio `src/` para cada página. Así tendre
 
 Cada carpeta debe contener un **_index.js_** que será el punto de entrada. Ademas contendrá los templates necesarios para renderizar dichas páginas correctamente.
 
-## 18 - Agregando la página de **_signin/_**
+## 18 - Agregando la página de **_`/signin`_**
 
 Vamos a repasar lo aprendido hasta ahora creando una nueva funcionalidad a nuestra aplicación: Crear la pagina de login. Además, aprendemos cómo gracias a watchify, podemos mostrar un error en la consola de forma automática en cuanto esto suceda.
 
@@ -169,19 +169,19 @@ También incluimos en el archivo `Gulpfile.js` una evento para controlar cuando 
 
 Algo que aporta mucho a la usabilidad del usuario es el poder mostrar en el Title el mensaje correcto de acuerdo a la vista en la que estemos, para eso nos vamos a apoyar de algunos cambios desde el backend además de una nueva librería llamada title, para asegurar que el title cambia de acuerdo a la ruta que elijamos.
 
-## 20 - Agregando un timeline para los usuarios
+## 20 - Agregando un _`timeline`_ para los usuarios
 
 Creamos un nuevo módulo de nuestra aplicación. A diferencia del primer repaso, esta vista tendrá un nuevo agregado: Fuente de iconos. Incluirlos en nuestro proyecto es muy sencillo, incluimos el CDN respectivo en nuestro template y podemos disponer de ellos gracias a un tag y una clase predeterminada.
 
-## 23 - Agragando la fecha de publicación
+## 23 - Agregando la fecha de publicación
 
-[Moment.js]() es una librería que nos ofrece diferentes formas de agregar fechas, desde el tradicional formato 24 horas hasta las fechas relativas (Hace x tiempo). Platzigram usa fechas relativas, por lo tanto, solo necesitamos pasar como parámetro la fecha actual ( se puede usar new Date() ) y la librería se encarga del resto.
+[Moment.js]() es una librería que nos ofrece diferentes formas de agregar fechas, desde el tradicional formato 24 horas hasta las fechas relativas (hace x tiempo). Platzigram usa fechas relativas, por lo tanto, solo necesitamos pasar como parámetro la fecha actual ( se puede usar new Date() ) y la librería se encarga del resto.
 
 ``` shell
  $ npm i --save moment
 ```
 
-Nosotros estamos utilizando *Browserify* y para que no de problemas tenemos que poner en el `index.js` de nuestra aplicación, en el raiz.
+Nosotros estamos utilizando *Browserify* y para que no de problemas tenemos que poner en el `index.js` de nuestra aplicación, en el raíz.
 
 
 ```javascript
@@ -213,9 +213,9 @@ createdAt: new Date().setDate(new Date().getDate() - 10)
 ...
 ```
 
-## 24 - Utilizando FormaJS para internacionalizar las fechas
+## 24 - Utilizando ***`FormatJS`*** para internacionalizar las fechas
 
-Soportar múltiples idiomas es un requerimiento básico en el desarrollo de aplicaciones modernas. Gracias a  una librería llamada [FormatJS](formatjs.io), podemos disponer de traducción de fecha y textos del lado del cliente. Además, usaremos un polyfill para asegurar la compatibilidad en todos los navegadores. Esta librería es mas estandar que `moment.js` y ademas es soportada nativamente por todos los navegadores, excepto en **Safari**. Esta librería aprovecha la variable definida en los navegadores como `Intl`.
+Soportar múltiples idiomas es un requerimiento básico en el desarrollo de aplicaciones modernas. Gracias a  una librería llamada [FormatJS](formatjs.io), podemos disponer de traducción de fecha y textos del lado del cliente. Además, usaremos un polyfill para asegurar la compatibilidad en todos los navegadores. Esta librería es mas estándar que `moment.js` y ademas es soportada natívamente por todos los navegadores, excepto en **Safari**. Esta librería aprovecha la variable definida en los navegadores como `Intl`.
 
 ``` shell
  $ npm i --save intl-relativeformat
@@ -256,7 +256,7 @@ var rf = new IntlRelativeFormat('es');
 
 Eliminamos la librería `moment.js` que ya no necesitaremos ya que la hemos sustituido por `Format.JS`
 
-## 25 - Utilizando FormatJS para internacionalizar los textos
+## 25 - Utilizando ***`FormatJS`*** para internacionalizar los textos
 
 Completando el ejercicio anterior, ahora usaremos `FormarJS` para cambiar los textos de la aplicación. Dependiendo de los diferentes valores de configuración que pasemos por parámetro, será el resultado mostrado. Para ello siguiendo con esta librería usaremos `IntlMessageFormat`. También la utilizaremos para traducir todos los textos para poder crear sitios multi-lenguaje.
 
@@ -294,9 +294,9 @@ var translate = require('../translate');
 ...
 ```
 
-## 26 - Cambiando el idioma y almacenándolo en localStorage
+## 26 - Cambiando el idioma y almacenándolo en ***`localStorage`***
 
-Añadimos todas las cadenas de traducción en los archivos `es.js` y `en.js`. Estas cadenas se referencian ahora en el código como:
+Añadimos todas las cadenas de traducción en los archivos `es.js` y `en.js`. Estas cadenas se referéncian ahora en el código como:
 
 ```javascript
 ...
@@ -393,9 +393,9 @@ module.exports = {
 }
 ```
 
-## 27 - Obteniendo una respuesta del servidor con Superagent
+## 27 - Obteniendo una respuesta del servidor con ***`Superagent`***
 
-Nuestra aplicación tendrá que tener almacenadas las diferentes `pictures` en algún sitio. Habotalmente esto se realiza mediante una bases de datos que reside en el lado del servidor y al cuál dirigimos nuestras peticiones para que nos devuelva las `pictures` que estamos buscando, o para que guarde las nuevas que estamos cargando.
+Nuestra aplicación tendrá que tener almacenadas las diferentes `pictures` en algún sitio. Habitualmente esto se realiza mediante una bases de datos que reside en el lado del servidor y al cuál dirigimos nuestras peticiones para que nos devuelva las `pictures` que estamos buscando, o para que guarde las nuevas que estamos cargando.
 
 Estas peticiones se realizan mediante **AJAX** y para ello se usa de forma mayoritaria **JQuery** pero también existen otras librerias que facilitan el trabajo. Una de estas es [Superagent](https://github.com/visionmedia/superagent). Vamos a usar esta librería para realizar estas operaciones.
 
@@ -482,9 +482,9 @@ function loadPictures(ctx, next) {
 La función `loadPictures` se encarga de realizar la petición asíncrona. Hacemos un `request` a la dirección `/api/pictures`. Cuando obtenemos una respuesta, comprobamos si se ha producido algún error, en caso contrario devolvemos la respuesta en la variable de contexto, `ctx.pictures` y damos paso a la siguiente función.
 
 ### Modificando el comportamiento del header
-Vamos a modificar el comportamiento de nuestra página del `home`. Esta página cada vez que la actualizamos se borra la cabecera con la navegación y se vuelve a mostrar una vez hemos obtenido todas las `pictures`. Un mejor comportamiento sería que cuando se actualiza solo se borre las `pictures` pero no la cabecera y el footer. También cuando se carga or primera vez debe mostrar primero la cabecera y el footer y luego cuando ya se han obtenido las pictures se insertan estas.
+Vamos a modificar el comportamiento de nuestra página del `home`. Esta página cada vez que la actualizamos se borra la cabecera con la navegación y se vuelve a mostrar una vez hemos obtenido todas las `pictures`. Un mejor comportamiento sería que cuando se actualiza solo se borre las `pictures` pero no la cabecera y el `footer`. También cuando se carga la primera vez debe mostrar primero la cabecera y el `footer` y luego cuando ya se han obtenido las `pictures` se insertan estas.
 
-Para eso vamos a pasar el header a una carpeta nueva, es decir, vamos a crear un nuevo módulo para ella. Ahí meteremos todo el código. Entonces el archivo `header/index.js` quedara como sigue.
+Para eso vamos a pasar el `header` a una carpeta nueva, es decir, vamos a crear un nuevo módulo para ella. Ahí meteremos todo el código. Entonces el archivo `header/index.js` quedara como sigue.
 
 ```javascript
 var yo = require('yo-yo');
@@ -527,7 +527,7 @@ body
 ...
 ```
 Pero en las páginas de `/signin` y `/signup` no debría aparecer la cabecera ya todavía no nos hemos logado.
-Por ello vamos a modificar el archivo `header/index.js` para convertirlo en un middleware.
+Por ello vamos a modificar el archivo `header/index.js` para convertirlo en un `middleware`.
 
 ```javascript
 
@@ -555,13 +555,13 @@ page('/', header, loadPictures, function (ctx, next) {
 ...
 ```
 
-## 28 - Obteniendo una respuesta del servdor con Axios
+## 28 - Obteniendo una respuesta del servidor con ***`Axios`***
 
 Otra forma de resolver las peticiones al servidor de forma asíncrona es mediante `promesas`.
 
-Las promesas es una novedosa forma de implementar y encadenar peticiones asíncronas. Pensemos que si necesitamos realizar varias peticiones al servidor, por ejemplo, pedimos primero el listado de `pictures ` que tenemos, una vez lo tengamos vamos a pedir el detalle de una de ellas y cuando lo tengamos necesitamos pedir todos los comentarios que se han añadido a esta. Incluso podríamos seleccionar un comentario y pedir nuevamente detalles de es comentario. Y así, sucesivamente.
+Las promesas es una novedosa forma de implementar y encadenar peticiones asíncronas. Pensemos que si necesitamos realizar varias peticiones al servidor, por ejemplo, pedimos primero el listado de `pictures` que tenemos, una vez lo tengamos vamos a pedir el detalle de una de ellas y cuando lo tengamos necesitamos pedir todos los comentarios que se han añadido a esta. Incluso podríamos seleccionar un comentario y pedir nuevamente detalles de es comentario. Y así, sucesivamente.
 
-El anterior ejemplo resulto mediante callbacks nos crearía un código horizontal con un callback que anida otro, que anida otro, que ... y así sucesivamente. Con lo que eso supone en cuanto a tratamiento de errores, etc..
+El anterior ejemplo resulto mediante `callbacks` nos crearía un código horizontal con un `callback` que anida otro, que anida otro, que ... y así sucesivamente. Con lo que eso supone en cuanto a tratamiento de errores, etc..
 
 El uso de promesas por contra nos crea un código vertical y al final una función que captura todos los errores.
 
@@ -590,13 +590,13 @@ function loadPicturesAxios(ctx, next) {
 
 La diferencia con `superagent` es que hemos sacado el tratamiento de errores del callback que hace la petición. La función asícrona o prmesa se llama `then()` y la que captura los errores `catch()`. Podemos encadenar tantas funciones `then()` como necesitemos y al final una única función `catch()` tendrá el error de la promesa que falló.
 
-## 29 - Obteniendo una respuesta del servidor con  Fech API
+## 29 - Obteniendo una respuesta del servidor con ***Fech API***
 
-Fecth es una implementación nativa en los navegadores, por tanto no necesitamos incorporar ñibrería alguna. Desafortunadamente no todos los navegadores soportan a día de hoy `fecth`. En [Can I use](http://caniuse.com/) podemos comprobar que navegadores soportan esta característica de forma nativa. ***Firefox*** y ***Chrome*** desde la versión 45 y ***Opera*** desde la versión 37.
+`Fecth` es una implementación nativa en los navegadores, por tanto no necesitamos incorporar ñibrería alguna. Desafortunadamente no todos los navegadores soportan a día de hoy `fecth`. En [Can I use](http://caniuse.com/) podemos comprobar que navegadores soportan esta característica de forma nativa. ***Firefox*** y ***Chrome*** desde la versión 45 y ***Opera*** desde la versión 37.
 
 Para los navegadores que no soportan `window.fetch` existe un [***window.fetch polyfill***](https://github.com/github/fetch).
 
-Veamos como sería la sintaxsis.
+Veamos como sería la sintaxis.
 
 ```javascript
 
@@ -615,13 +615,13 @@ function loadPicturesFetch(ctx, next) {
 }
 ```
 
-Fetch nos devuelve una promesa `res.json()`, así que debemos llamar a esta promesa para que cuando este resuelta entonces si que obtenemos nuestros datos y podemos ejecutar `ǹext()` para dar paso al siguiente middleware.
+`Fetch` nos devuelve una promesa `res.json()`, así que debemos llamar a esta promesa para que cuando este resuelta entonces si que obtenemos nuestros datos y podemos ejecutar `next()` para dar paso al siguiente `middleware`.
 
-## 30 - Obteniendo una respuesta del servidor con asyn/await
+## 30 - Obteniendo una respuesta del servidor con `asyn/await`
 
 **ECMAScript 6**, ***ES6*** o ***EMACScript 2015*** es la actual versión de JavaScript. Esta versión aún no soporta `asyn/await` que vendrá con ***ES7*** en el *2016*.
 
-Veamos como es el estandar que vendrá.
+Veamos como es el estándar que vendrá.
 
 ```javascript
 
@@ -711,9 +711,11 @@ Para ello vamos a encerrar el input en un `div` con las clases `btn btn-flat` de
     </div>
   </div>
 ```
-Por supuesto hemos encerrado el formulario en una fila que contiene una columna. Notar que también hemos añadido el `translate` para convertir el texto al idioma seleccionado. Y a los elementos activos (`form`, `input`, `button`) les hemos colocado la función que queremos que se ejecute en el evento correspondiente, por ejemplo en el `form`, `onsubmit=${onsubmit}`. 
+Por supuesto hemos encerrado el formulario en una fila que contiene una columna. Notar que también hemos añadido el `translate` para convertir el texto al idioma seleccionado. Y a los elementos activos (`form`, `input`, `button`) les hemos colocado la función que queremos que se ejecute en el evento correspondiente, por ejemplo en el `form`, `onsubmit=${onsubmit}`.
 
-Ahora solo tenemos que dar estilo al input para sacarlo de nuestra vista.
+>Notar que para manejar archivos en un formulario es necesario añadir el atributo `enctype="multipart/form-data"`. De otro modo no se responde a los `ìnput` de tipo `file`.
+
+Ahora solo tenemos que dar estilo al `input` para sacarlo de nuestra vista.
 
 ```scss
 .form-upload {
@@ -744,7 +746,7 @@ Ahora solo tenemos que dar estilo al input para sacarlo de nuestra vista.
 
 Notar que el elemento que contiene el `input` lo hemos posicionado de forma `relative` y el propio `input` de forma `absolute`. Lo posicionamos dentro del `div` que lo contiene en `top: 0; right: 0;` y con una fuente de tamaño de `20px`. De esta forma nos aseguramos que el `input` ocupa todo el `div` y que cuando hagamos *click* se dispare el `input file` y nos habra la ventana para seleccionar el archivo (que es el funcionamiento por defecto de un campo `input`). Para ocultarlo ponemos `opacity: 0;` y desaparece de nuestra vista. Hemos añadido `filter: alpha(opacity=0);` para los navegadores que no soportan `opacity`. Recordar una última cosa, la propiedad `overflow: hidden;` es para que quede oculto todo lo que desborde del contenedor.
 
-llega el moemnto de darle vida al formulario mediante el código. Cuando hallamos seleccionado un archivo se dispara el evento `onchange` en el campo `input` vamos a utilizarlo para cambiar el estado de botones. Los que estaban visibles se ocultan y viceversa. Esto es una función `toggle`, pero también queremos que cuando se pulse el botón de cancelar se vuelva a la situación original, osea `toggle` otra vez. Asi que en las funciones `onchange` y `cancel` llamamos a la función que se encarga de hacer el `toggle`.
+Llega el momento de darle vida al formulario mediante el código. Cuando hallamos seleccionado un archivo se dispara el evento `onchange` en el campo `input` vamos a utilizarlo para cambiar el estado de botones. Los que estaban visibles se ocultan y viceversa. Esto es una función `toggle`, pero también queremos que cuando se pulse el botón de cancelar se vuelva a la situación original, osea `toggle` otra vez. Así que en las funciones `onchange` y `cancel` llamamos a la función que se encarga de hacer el `toggle`.
 
 ```javascript
   function toggleButtons() {
@@ -764,6 +766,79 @@ llega el moemnto de darle vida al formulario mediante el código. Cuando hallamo
 
 ```
 
+## 32 - Subiendo la foto a nuestro servidor web
 
+Cuando se hace `click` en un elemento de tipo `submit` dentro de un formulario se dispara `onsubmit` en el mismo. Cuando esto ocurre busca el atributo `action` y el método (si es `post` o `get`, etc y la ruta). Por eso hemos añadido al evento `onsubmit` la función `onsubmit`.
 
+```javascript
+  function onsubmit(ev) {
+    ev.preventDefault();
 
+    var data = new FormData(this);
+    request
+      .post('/api/pictures')
+      .send(data)
+      .end(function (err, res) {
+        console.log(arguments);
+      })
+  }
+
+```
+
+Para evitar que el formulario realice las operaciones que tiene asignadas por defecto cuando se dispara el evento `onsubmit`, es que colocamos antes que nada el `ev.preventDefault()`.
+Cuando se dispara el evento en la variable `this` tenemos todos los datos del formulario. Los datos del formulario los vamos a manejar como un objeto `FormData` que esta dentro de window. Por tanto, `var data = new FormData(this);` contendrá todos los datos del formulario.
+
+Necesitamos un `request` para enviar los datos al servidor. Utilizaremos la librería `superagent` (aunque ya vimos varias formas de implementar `request`). Los enviaremos mediante el método `post`.
+
+```javascript
+    request
+      .post('/api/pictures')
+      .send(data)
+      .end(function (err, res) {
+        console.log(arguments);
+      })
+```
+
+Necesitamos una librería cargar el archivo y guardarlo en el disco duro de nuestro servidor. Vamos a utilizar la librería [`multer`](https://www.npmjs.com/package/multer) .
+
+```shell
+ $ npm i --save multer
+```
+
+En nuestro `server.js` tenemos que añadir esta librería y crear el almacenamiento tal como nos dice la documentación de [`multer`](https://www.npmjs.com/package/multer#diskstorage) para el caso de utilizar un almacenamiento en disco que es lo que queremos.
+
+```javascript
+  var multer = require('multer');
+  var ext = require('file-extension');
+
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, +Date.now() + '.' + ext(file.originalname))
+    }
+  });
+
+  var upload = multer({ storage: storage }).single('picture');
+```
+
+El destino va a ser una carpeta que llamaremos `uploads` y el nombre del archivo lo construimos con el número de fecha y hora y la extensión del archivo original. Para hacer esto de una forma sencilla empleamos la librería `file-extension` que debemos instalar como dependencia y llamar al principio de nuestro `server.js`.
+
+```shell
+ $ npm i --save file-extension
+```
+
+Ahora creamos nuestro `post` que va a ser una carga simple `upload.single('picture')` según la [documentación](https://www.npmjs.com/package/multer#usage), donde `picture` es el nombre que hemos dado a nuestro `input`.
+
+```javascript
+app.post('/api/pictures', function (req, res) {
+  upload(req, res, function (err) {
+    if (err) {
+      return res.status(500).send("Error uploading file");
+    }
+    res.send('File uploaded');
+  })
+})
+
+```
