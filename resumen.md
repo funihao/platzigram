@@ -23,9 +23,12 @@
 	- [26 - Cambiando el idioma y almacenándolo en localStorage](#26-cambiando-el-idioma-y-almacenndolo-en-localstorage)
 	- [27 - Obteniendo una respuesta del servidor con Superagent](#27-obteniendo-una-respuesta-del-servidor-con-superagent)
 		- [Modificando el comportamiento del header](#modificando-el-comportamiento-del-header)
+	- [28 - Obteniendo una respuesta del servdor con Axios](#28-obteniendo-una-respuesta-del-servdor-con-axios)
+	- [29 - Obteniendo una respuesta del servidor con  Fech API](#29-obteniendo-una-respuesta-del-servidor-con-fech-api)
+	- [30 - Obteniendo una respuesta del servidor con asyn/await](#30-obteniendo-una-respuesta-del-servidor-con-asynawait)
+	- [31 - Agregando un botón para subir una nueva foto](#31-agregando-un-botn-para-subir-una-nueva-foto)
 
 <!-- /TOC -->
-
 ***
 
 # Curso definitivo de Java Script
@@ -618,7 +621,7 @@ Fetch nos devuelve una promesa `res.json()`, así que debemos llamar a esta prom
 
 **ECMAScript 6**, ***ES6*** o ***EMACScript 2015*** es la actual versión de JavaScript. Esta versión aún no soporta `asyn/await` que vendrá con ***ES7*** en el *2016*.
 
-Veamos como es el estandar que vendrá. 
+Veamos como es el estandar que vendrá.
 
 ```javascript
 
@@ -626,10 +629,10 @@ async function asynLoad(ctx, next) {
   try {
     ctx.pictures = await fetch('api/pictures').then(res => res.json());
     next();
-  } 
+  }
   catch (err) {
     return console.log(err);
-  } 
+  }
 }
 ```
 
@@ -649,7 +652,7 @@ Pero necesitamos decirle a babel que incluya los presets y los plugins al moment
 ```javascript
   function rebundle() {
     bundle
-      .transform(babel, { presets: ['es2015'], 
+      .transform(babel, { presets: ['es2015'],
                           plugins: [ 'syntax-async-functions',
                                      'transform-regenerator' ]})
       .bundle()
@@ -663,7 +666,7 @@ Pero necesitamos decirle a babel que incluya los presets y los plugins al moment
 También necesitamos instalar los `polyfill` que van a hacer que sean compatibles las nuevas funciones con los navegadores.
 
 ```shell
- $ npm install --save-dev babel-polyfill 
+ $ npm install --save-dev babel-polyfill
 ```
 
 Y requerir esta librería en nuestro `src/index.js`
@@ -681,4 +684,86 @@ page();
 ```
 
 De esta forma tenemos el código preparado para la próxima versión ***ES7***
+
+## 31 - Agregando un botón para subir una nueva foto
+
+Vamos ahora a agregar un botón en nuestro `homepage/template.js`
+
+En realidad el botón será un formulario para poder controlar todo el proceso. El formulario debe contener un campo `input` de tipo `file` y por supuesto un botón tipo `submit` para enviar o subir la imagen al servidor, donde será guardada. Ademas vamos a agregar un botón para cancelar el proceso. Pero para simplificar nuestro formulario, solo queremos que se vea un único botón, así que inicialmente ocultaremos los botones de *subir* y *cancelar* y solo los mostraremos una vez hayamos selecionado el archivo a subir.
+
+***Materialize CSS*** dispone de una clase para ocultar campos `hide`. Es con esta clase que vamos a controlar el visionado de los botones. También dispone de una clase para crear un [botón de tipo `file`](materializecss.com/forms.html#file) en un formulario. Pero vamos a hacerlo nosotros y controlar el proceso.
+
+Los campos de tipo `input` tienen un comportamiento predeterminado en los navegadores, con un botón bastante feo y anticuado y textos que dependeran de la versión idiomática del navegador. Nosotros vamos a ocultar todo ese formato y en su lugar vamos a mostrar el botón que nosotros podemos *customizar* y decorar a nuestro gusto.
+
+Para ello vamos a encerrar el input en un `div` con las clases `btn btn-flat` de *materialize*. Este será el botón que se vea. Ademas añadimos un icono y el texto del botón encerrado en las etiquetas `span`. En el `template.js` de nuestra `homepage` añadimos:
+
+```html
+  <div class="row">
+    <div class="col s12 m10 offset-m1 l8 offset-l2 center-align">
+      <form enctype="multipart/form-data" class="form-upload" id="formUpload" onsubmit=${onsubmit}>
+        <div id="fileName" class="fileUpload btn btn-flat cyan">
+          <span><i class="fa fa-camera" aria-hidden="true"></i> ${translate('upload-picture')}</span>
+          <input name="picture" id="file" type="file" class="upload" onchange=${onchange} />
+        </div>
+        <button id="btnUpload" type="submit" class="btn btn-flat cyan hide">${translate('upload')}</button>
+        <button id="btnCancel" type="button" class="btn btn-flat red hide" onclick=${cancel}><i class="fa fa-times" aria-hidden="true"></i></button>
+      </form>
+    </div>
+  </div>
+```
+Por supuesto hemos encerrado el formulario en una fila que contiene una columna. Notar que también hemos añadido el `translate` para convertir el texto al idioma seleccionado. Y a los elementos activos (`form`, `input`, `button`) les hemos colocado la función que queremos que se ejecute en el evento correspondiente, por ejemplo en el `form`, `onsubmit=${onsubmit}`. 
+
+Ahora solo tenemos que dar estilo al input para sacarlo de nuestra vista.
+
+```scss
+.form-upload {
+
+  span, button {
+    color: white;
+  }
+
+  .fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+
+
+    input {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      opacity: 0;
+      filter: alpha(opacity=0);
+    }
+  }
+}
+```
+
+Notar que el elemento que contiene el `input` lo hemos posicionado de forma `relative` y el propio `input` de forma `absolute`. Lo posicionamos dentro del `div` que lo contiene en `top: 0; right: 0;` y con una fuente de tamaño de `20px`. De esta forma nos aseguramos que el `input` ocupa todo el `div` y que cuando hagamos *click* se dispare el `input file` y nos habra la ventana para seleccionar el archivo (que es el funcionamiento por defecto de un campo `input`). Para ocultarlo ponemos `opacity: 0;` y desaparece de nuestra vista. Hemos añadido `filter: alpha(opacity=0);` para los navegadores que no soportan `opacity`. Recordar una última cosa, la propiedad `overflow: hidden;` es para que quede oculto todo lo que desborde del contenedor.
+
+llega el moemnto de darle vida al formulario mediante el código. Cuando hallamos seleccionado un archivo se dispara el evento `onchange` en el campo `input` vamos a utilizarlo para cambiar el estado de botones. Los que estaban visibles se ocultan y viceversa. Esto es una función `toggle`, pero también queremos que cuando se pulse el botón de cancelar se vuelva a la situación original, osea `toggle` otra vez. Asi que en las funciones `onchange` y `cancel` llamamos a la función que se encarga de hacer el `toggle`.
+
+```javascript
+  function toggleButtons() {
+    document.getElementById('fileName').classList.toggle('hide');
+    document.getElementById('btnUpload').classList.toggle('hide');
+    document.getElementById('btnCancel').classList.toggle('hide');
+  }
+
+  function cancel() {
+    toggleButtons();
+    document.getElementById('formUpload').reset();
+  }
+
+  function onchange() {
+    toggleButtons();
+  }
+
+```
+
+
+
 
